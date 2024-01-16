@@ -1,50 +1,49 @@
-<?php require 'db-connect.php'; ?>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 <?php
-// データベース接続
-try {
-    $pdo = new PDO($connect, USER, PASS);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo 'データベース接続エラー: ' . $e->getMessage();
-    exit();
-}
-
-// レシピが送信された場合
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // フォームから送信されたデータを取得
-    $mac_name = $_POST['mac_name'];
-    $price = $_POST['price'];
-
-    // SQLクエリの準備
-    $sql = "INSERT INTO MAC (mac_id, mac_name, price) VALUES (:mac_id, :mac_name, :price)";
-
-    // プリペアドステートメントの作成
-    $stmt = $pdo->prepare($sql);
-
-    // パラメータのバインド
-    $stmt->bindParam(':mac_id', $mac_id, PDO::PARAM_INT);
-    $stmt->bindParam(':mac_name', $mac_name, PDO::PARAM_STR);
-    $stmt->bindParam(':price', $price, PDO::PARAM_STR);
-
-    try {
-        // クエリの実行
-        $stmt->execute();
-
-        // 登録成功時のメッセージ
-        echo '<p class="has-text-success">レシピが正常に登録されました。</p>';
-    } catch (PDOException $e) {
-        // エラーメッセージ
-        echo '<p class="has-text-danger">エラー: ' . $e->getMessage() . '</p>';
-    }
-}
+const SERVER = 'mysql220.phy.lolipop.lan';
+const DBNAME = 'LAA1517363-final';
+const USER = 'LAA1517363';
+const PASS = 'Pass0303';
+$connect = 'mysql:host=' . SERVER . ';dbname=' . DBNAME . ';charset=utf8';
 ?>
-<nav class="level">
-<!-- 中央揃え -->
-<div class="level-item">
-<p><button onclick = "location.href='ichiran.php'">コラム管理画面へ</button></p>
-</div>
-</nav>
-</div>
-</diV>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <?php
+    $pdo=new PDO($connect,USER,PASS);
+    $sql=$pdo->prepare('insert into MAC(id,name,price)values(?,?,?)');
+    if (!preg_match('/^\d+$/',$_POST['id'])){
+        echo'商品番号を整数で入力してください。';
+        }else if(empty($_POST['name'])){
+            echo '商品名を入力してください。';
+        }else if(!preg_match('/^[0-9]+$/',$_POST['price'])){
+            echo '商品価格を整数で入力してください。';
+        }else if($sql->execute([$_POST['id'],$_POST['name'],$_POST['price']])){
+            echo '<font color="red"追加に成功しました。</font>';
+        }else {
+            echo '<font color="red"追加に失敗しました。</font>';
+        }
+    ?>
+    <br><hr><br>
+    <table>
+        <tr><th>商品番号</th><th>商品名</th><th>価格</th></tr>
+    <?php
+    foreach($pdo->query('select * from MAC') as $row) {
+        echo '<tr>';
+        echo '<td>', $row['id'], '</td>';
+        echo '<td>' ,$row['name'], '</td>';
+        echo '<td>' ,$row['price'], '</td>';
+        echo '</tr>';
+         echo "\n";
+    }
+?>
+</table>
+<form action="touroku-input.php" method="post">
+<button type="submit">追加</button>
+</form>
+<button onclick="location.href='ichiran.php'">トップへ戻る</button>
+    </body>
+</html>

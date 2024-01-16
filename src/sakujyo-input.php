@@ -1,44 +1,35 @@
-<?php require 'db-connect.php'; ?>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-<?php 
-// データベース接続
-$pdo = new PDO($connect,USER, PASS);
-// Columnsテーブルからデータ取得
-$sql = "SELECT * FROM MAC WHERE mac_id = ?";
-$result = $pdo->prepare($sql);
-$result->execute([$_GET['mac_id']]);
-$row = $result->fetch();
+<?php
+const SERVER ='mysql220.phy.lolipop.lan';
+const DBNAME ='LAA1517363-final';
+const USER ='LAA1517363';
+const PASS ='Pass0303';
+
+    $connect = 'mysql:host='. SERVER . ';dbname='. DBNAME . ';charset=utf8';
 ?>
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=de
-    vice-width, initial-scale=1.0">
-    <title>レシピ削除画面</title>
-</head>
-<body>
-<h2></h2>
-<div class="content">
-<div class="container">
-<nav class="level">
-<!-- 中央揃え -->
-<div class="level-item">
-    <form action="sakujyo-output.php" method="post">
-        <p><input type="hidden" name="mac_id" value="<?= $row['mac_id'] ?>"></p>
-        <p><div class="has-text-centered"><?= $row['mac_name'] ?></div></p>
-        <p><div class="has-text-centered"><?= $row['price'] ?></div></p>
-        <p class="has-text-centered">削除しますか？</p>
-        <nav class="level">
-        <!-- 中央揃え -->
-        <div class="level-item">
-        <input class="button has-background-success-dark has-text-white" type="submit" value="削除">
-        <a href="ichiran.php"><button class="button has-background-success-dark has-text-white" type="button">戻る</button></a>
-        </div>
-        </nav>
-    </form>
-</div>
-</diV>
-</body>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+        <table>
+    <tr><th>商品番号</th><th>商品名</th><th>商品価格</th></tr>
+<?php
+    $pdo=new PDO($connect, USER, PASS);
+    foreach ($pdo->query('select * from MAC') as $row) {
+    echo '<tr>';
+    echo '<td>', $row['id'], '</td>';
+    echo '<td>', $row['name'], '</td>';
+    echo '<td>', $row['price'], '</td>';
+    echo '<td>';
+    echo '<a href="sakujyo-output.php?id=',$row['id'],'">削除</a>';
+    echo '</td>';
+    echo '</tr>';
+    echo "\n";
+    }
+
+?>
+    </table>
+    </body>
 </html>

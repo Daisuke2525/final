@@ -1,38 +1,45 @@
 <?php
-require 'db-connect.php';
+const SERVER ='mysql220.phy.lolipop.lan';
+const DBNAME ='LAA1517363-final';
+const USER ='LAA1517363';
+const PASS ='Pass0303';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['mac_id'])) {
-    try {
-        // データベース接続
-        $pdo = new PDO($connect, USER, PASS);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        // POSTデータ受け取り
-        $cooking_id = $_POST['mac_id'];
-
-        // Cookingテーブルのデータ削除のSQLクエリ
-        $sql = "DELETE FROM MAC WHERE mac_id = :mac_id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':mac_id', $mac_id, PDO::PARAM_INT);
-        $stmt->execute();
-
-        // 削除成功メッセージ
-        echo "レシピが削除されました。";
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-    } finally {
-        // データベース接続を閉じる
-        $pdo = null;
-    }
-} else {
-    echo "不正なアクセスです";
-}
+    $connect = 'mysql:host='. SERVER . ';dbname='. DBNAME . ';charset=utf8';
 ?>
-<nav class="level">
-<!-- 中央揃え -->
-<div class="level-item">
-<p><button onclick = "location.href='ichiran.php'">レシピ一覧へ</button></p>
-</div>
-</div>
-</div>
-</nav>
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+<?php
+    $pdo=new PDO($connect, USER, PASS);
+    $sql=$pdo->prepare('delete  from MAC  where id=?' );
+    if ($sql->execute([$_GET['id']])) {
+        echo '削除に成功しました。';
+    } else{
+        echo '削除に失敗しました。';
+    }
+
+
+?>
+    <br><hr><br>
+	<table>
+		<tr><th>商品番号</th><th>商品名</th><th>価格</th></tr>
+<?php
+    foreach ($pdo->query('select * from MAC') as $row) {
+        echo '<tr>';
+        echo '<td>',$row['id'], '</td>';
+        echo '<td>',$row['name'], '</td>';
+        echo '<td>',$row['price'], '</td>';
+        echo '</tr>';
+        echo "\n";
+    }
+?> 
+</table>
+    <form action="sakujyo-input.php" method="post">
+        <button type="submit">削除画面へ戻る</button>
+    </form>
+    </body>
+</html>

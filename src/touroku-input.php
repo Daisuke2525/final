@@ -1,26 +1,34 @@
-<?php require 'db-connect.php'; ?>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 <?php
-// 接続確認
-// データベース接続
-$pdo = new PDO($connect,USER, PASS);
+const SERVER = 'mysql220.phy.lolipop.lan';
+const DBNAME = 'LAA1517363-final';
+const USER = 'LAA1517363';
+const PASS = 'Pass0303';
+$connect = 'mysql:host=' . SERVER . ';dbname=' . DBNAME . ';charset=utf8';
 ?>
-<h3 class="title is-3 has-text-centered">登録</h3>
-<div class="content">
-<div class="container">
-<nav class="level">
-<!-- 中央揃え -->
-<div class="level-item">
-<form action="touroku-output.php" method="post">
-    商品名:<input type="text" name="mac_name" required><br>
-    価格:<input type="text" name="price" required><br>
-    <nav class="level">
-    <!-- 中央揃え -->
-    <div class="level-item">
-    <input class="button has-background-success-dark has-text-white" type="submit" value="登録">
-</form>
-</div>
-</diV>
-</div>
-</nav>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>追加</title>
+</head>
+<body>
+    <p>商品を追加します。</P>
+    <?php
+    $pdo = new PDO('mysql:host=mysql220.phy.lolipop.lan;dbname=LAA1517363-final;charset=utf8',
+    'LAA1517363','Pass0303');
+    foreach($pdo->query('select * from MAC') as $row) {
+        echo '<p>';
+        echo $row['id'], ':';
+        echo $row['name'], ':';
+        echo $row['price'];
+        echo '</p>';
+    }
+    ?>
+    <form action="touroku-input.php" method="post">
+        商品番号<input type="text" name="id"><br>
+        商品名<input type="text" name="name"><br>
+        価格<input type="text" name="price"><br>
+        <input type="submit">追加</button>
+        </form>
+    </body>
+</html>
