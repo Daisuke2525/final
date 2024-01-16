@@ -14,19 +14,19 @@ try {
 // レシピが送信された場合
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // フォームから送信されたデータを取得
-    $cooking_name = $_POST['cooking_name'];
-    $category = $_POST['category'];
+    $mac_name = $_POST['mac_name'];
+    $price = $_POST['price'];
 
     // SQLクエリの準備
-    $sql = "INSERT INTO Cooking (cooking_id, cooking_name, category) VALUES (:cooking_id, :cooking_name, :category)";
+    $sql = "INSERT INTO MAC (mac_id, mac_name, price) VALUES (:mac_id, :mac_name, :price)";
 
     // プリペアドステートメントの作成
     $stmt = $pdo->prepare($sql);
 
     // パラメータのバインド
-    $stmt->bindParam(':cooking_id', $cooking_id, PDO::PARAM_INT);
-    $stmt->bindParam(':cooking_name', $cooking_name, PDO::PARAM_STR);
-    $stmt->bindParam(':category', $category, PDO::PARAM_STR);
+    $stmt->bindParam(':mac_id', $mac_id, PDO::PARAM_INT);
+    $stmt->bindParam(':mac_name', $mac_name, PDO::PARAM_STR);
+    $stmt->bindParam(':price', $price, PDO::PARAM_STR);
 
     try {
         // クエリの実行

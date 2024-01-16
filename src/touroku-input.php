@@ -6,15 +6,15 @@
 // データベース接続
 $pdo = new PDO($connect,USER, PASS);
 ?>
-<h3 class="title is-3 has-text-centered">レシピ登録</h3>
+<h3 class="title is-3 has-text-centered">登録</h3>
 <div class="content">
 <div class="container">
 <nav class="level">
 <!-- 中央揃え -->
 <div class="level-item">
 <form action="touroku-output.php" method="post">
-    　レシピ名:<input type="text" name="cooking_name" required><br>
-    カテゴリー:<input type="text" name="category" required><br>
+    商品名:<input type="text" name="mac_name" required><br>
+    価格:<input type="text" name="price" required><br>
     <nav class="level">
     <!-- 中央揃え -->
     <div class="level-item">
